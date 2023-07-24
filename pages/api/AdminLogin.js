@@ -4,7 +4,7 @@ import { createRouter, expressWrapper } from "next-connect";
 const router = createRouter();
 
 router.post(async (req, res) => {
-  if (atob(req.body.pass) == "BigptAdvancedAi@!912") {
+  if (atob(req.body.pass) == "aiAdvanced24justice@!291") {
     res.send({ success: true, data: "" });
   } else {
     res.send({ success: false, data: "Check Credentials Again" });
