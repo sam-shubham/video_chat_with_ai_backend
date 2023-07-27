@@ -14,6 +14,7 @@ import {
 router.post(async (req, res) => {
   try {
     var allLinks = req.body.links;
+    var { userSpecificLink } = req.body;
     var linksDetails = {};
     for (const link of allLinks) {
       new URL(link);
@@ -35,7 +36,11 @@ router.post(async (req, res) => {
 
         //   console.log(alltext);
 
-        var confirmedVectorAdded = await addvectorStore(link, alltext);
+        var confirmedVectorAdded = await addvectorStore(
+          link,
+          alltext,
+          userSpecificLink
+        );
       } catch (error) {}
       //   console.log(await deleteVectors("https://adamglobal.com/about-us/"));
       //   console.log(await callVectorDBQAChain("adamglobal"));

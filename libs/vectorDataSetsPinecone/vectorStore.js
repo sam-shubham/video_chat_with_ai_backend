@@ -32,7 +32,7 @@ export async function getAllVectors() {
   const queryResponse = await index.query({ queryRequest });
   return queryResponse;
 }
-export const addvectorStore = async (fullurl, textvalues) => {
+export const addvectorStore = async (fullurl, textvalues, userSpecificLink) => {
   try {
     await pinecone.init({
       environment: `${process.env.PINECONE_ENVIRONMENT}`,
@@ -68,6 +68,7 @@ export const addvectorStore = async (fullurl, textvalues) => {
           metadata: {
             ...documents[idx].metadata,
             text: documents[idx].pageContent,
+            userSpecificLink,
           },
           values,
         })),
@@ -105,7 +106,8 @@ export async function callVectorDBQAChain(query) {
     index,
     "allwebsites"
   );
-  return docs.join(" ");
+  console.log(docs);
+  return { text: docs.text.join(" "), userSpecificLink: docs.userSpecificLink };
 }
 
 //vectorstore
@@ -130,14 +132,20 @@ export async function similarityVectorSearch(
   });
 
   const result = [];
+  var resultMetaUrls = [];
 
   if (results.matches) {
     for (const res of results.matches) {
       const { text: pageContent, ...metadata } = res?.metadata;
       if (res.score) {
         result.push([pageContent]);
+        resultMetaUrls.push(metadata.userSpecificLink);
       }
     }
   }
-  return result.map((result) => result[0]);
+  resultMetaUrls = new Set([...resultMetaUrls]);
+  return {
+    text: result.map((result) => result[0]),
+    userSpecificLink: [...resultMetaUrls],
+  };
 }

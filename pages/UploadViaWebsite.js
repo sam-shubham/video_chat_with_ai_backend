@@ -219,12 +219,16 @@ const UploadViaWebsite = () => {
                       formel.target.querySelector("button").disabled = false;
                       return;
                     }
+                    var userSpecificLink = prompt(
+                      "Enter Any Url/Video Url For Refrence(Leave Empty if not any)"
+                    );
+
                     var links = Array.from(
                       formel.target.querySelectorAll("input:checked")
                     ).map((el) => el.value);
                     var { data: axres } = await axios.post(
                       "/api/ScrapWebsite/ScrapWebsites",
-                      { links }
+                      { links, userSpecificLink }
                     );
                     if (!axres.data.matches[0]) {
                       setNothingFound(true);

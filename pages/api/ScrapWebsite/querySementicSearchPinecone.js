@@ -11,7 +11,11 @@ const router = createRouter();
 router.post(async (req, res) => {
   try {
     var response = await callVectorDBQAChain(req.body.query);
-    res.send({ success: true, data: response });
+    res.send({
+      success: true,
+      data: response.text,
+      userSpecificLink: response.userSpecificLink,
+    });
   } catch (error) {
     res.send({ success: false, data: [] });
   }
