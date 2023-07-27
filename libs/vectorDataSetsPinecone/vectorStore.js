@@ -106,7 +106,6 @@ export async function callVectorDBQAChain(query) {
     index,
     "allwebsites"
   );
-  console.log(docs);
   return { text: docs.text.join(" "), userSpecificLink: docs.userSpecificLink };
 }
 
