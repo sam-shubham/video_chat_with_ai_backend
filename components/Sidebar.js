@@ -46,7 +46,7 @@ const Sidebar = () => {
         <div className="flex flex-col gap-[2rem] w-full">
           <div className="w-full items-center flex justify-start /ml-[1rem]">
             <img
-              src="/ADAM Global.png"
+              src="/24justice.png"
               className="h-[2.7rem] w-full object-contain /w-fit"
               alt=""
             />
