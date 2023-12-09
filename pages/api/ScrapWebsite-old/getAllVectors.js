@@ -1,15 +1,15 @@
 import dbConnect from "@/libs/database/dbconnect";
 import openAiSettings from "@/libs/database/models/openAiSettings";
-import { getAllVectors } from "@/libs/vectorDataSets/vectorStore";
+import { getAllVectors } from "@/libs/vectorDataSetsPinecone/vectorStore";
 import { createRouter, expressWrapper } from "next-connect";
 const router = createRouter();
 
 router.get(async (req, res) => {
   try {
     var allvectors = await getAllVectors();
-    res.send({ success: true, data: { matches: allvectors } });
+    res.send({ success: true, data: allvectors });
   } catch (error) {
-    res.send({ success: false, data: { matches: allvectors } });
+    res.send({ success: false, data: [] });
   }
 });
 

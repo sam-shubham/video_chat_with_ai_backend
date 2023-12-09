@@ -9,7 +9,7 @@ import {
   callVectorDBQAChain,
   deleteVectors,
   getAllVectors,
-} from "@/libs/vectorDataSets/vectorStore";
+} from "@/libs/vectorDataSetsPinecone/vectorStore";
 
 router.post(async (req, res) => {
   try {
@@ -51,7 +51,7 @@ router.post(async (req, res) => {
       //   }
     }
     var allvectors = await getAllVectors();
-    res.send({ success: true, data: { matches: allvectors } });
+    res.send({ success: true, data: allvectors });
   } catch (error) {
     console.log(error);
     res.send({ success: false, data: [] });

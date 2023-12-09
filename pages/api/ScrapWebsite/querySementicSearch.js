@@ -1,15 +1,16 @@
 import dbConnect from "@/libs/database/dbconnect";
 import openAiSettings from "@/libs/database/models/openAiSettings";
-import { getAllVectors } from "@/libs/vectorDataSets/vectorStore";
+import { SimilaritySearchVectorDatabase } from "@/libs/vectorDataSets/vectorStore";
 import { createRouter, expressWrapper } from "next-connect";
 const router = createRouter();
 
-router.get(async (req, res) => {
+router.post(async (req, res) => {
   try {
-    var allvectors = await getAllVectors();
-    res.send({ success: true, data: { matches: allvectors } });
+    var { responsetext, userSpecificLink } =
+      await SimilaritySearchVectorDatabase(req.body.query);
+    res.send({ success: true, data: responsetext, userSpecificLink });
   } catch (error) {
-    res.send({ success: false, data: { matches: allvectors } });
+    res.send({ success: false, data: [] });
   }
 });
 
