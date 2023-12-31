@@ -101,11 +101,15 @@ export async function deleteVectorWithId(ids) {
 }
 
 export async function getAllVectors() {
-  var collection = await connectCollection();
-  var queryResponse = await collection.get();
-  var mapedids = queryResponse.ids.map((ids, idx) => ({
-    id: ids,
-    userSpecificLink: queryResponse.metadatas[idx].userSpecificLink,
-  }));
-  return mapedids;
+  try {
+    var collection = await connectCollection();
+    var queryResponse = await collection.get();
+    var mapedids = queryResponse.ids.map((ids, idx) => ({
+      id: ids,
+      userSpecificLink: queryResponse?.metadatas[idx]?.userSpecificLink || "",
+    }));
+    return mapedids;
+  } catch (error) {
+    console.log(error);
+  }
 }

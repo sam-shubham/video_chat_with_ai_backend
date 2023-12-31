@@ -45,7 +45,8 @@ const UploadViaWebsite = () => {
   useEffect(() => {
     (async () => {
       var { data: axres } = await axios.get("/api/ScrapWebsite/getAllVectors");
-      if (!axres.data.matches[0]) {
+      console.log(axres);
+      if (axres.data && !axres.data.matches[0]) {
         setNothingFound(true);
       } else {
         setNothingFound(false);
