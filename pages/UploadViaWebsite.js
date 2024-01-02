@@ -227,10 +227,17 @@ const UploadViaWebsite = () => {
                     var links = Array.from(
                       formel.target.querySelectorAll("input:checked")
                     ).map((el) => el.value);
+                    var toastID = toast.loading("Scrapping websites...");
                     var { data: axres } = await axios.post(
                       "/api/ScrapWebsite/ScrapWebsites",
                       { links, userSpecificLink }
                     );
+                    toast.update(toastID, {
+                      isLoading: false,
+                      type: "success",
+                      render: "Websites uploaded",
+                      autoClose: 1500,
+                    });
                     if (!axres.data.matches[0]) {
                       setNothingFound(true);
                     } else {
