@@ -56,21 +56,27 @@ export const addvectorStore = async (fulurl, textvalues, userSpecificLink) => {
       const texts = documents.map(({ pageContent }) => pageContent);
       return addVectors(await embedder.generate(texts), documents, fulurl);
     }
-
     async function addVectors(vectors, documents, ids) {
-      var mapedvectors = vectors.map((values, idx) => ({
-        ids: ids + "/" + idx,
-        metadatas: {
-          ...documents[idx].metadata,
-          userSpecificLink,
-          //   text: documents[idx].pageContent,
-        },
-        documents: documents[idx].pageContent,
-        embeddings: values,
-      }));
+      try {
+        var mapedvectors = vectors.map((values, idx) => ({
+          ids: ids + "/" + idx,
+          metadatas: {
+            ...documents[idx].metadata,
+            userSpecificLink: JSON.stringify(userSpecificLink),
+            // SourceDetails: {
+            //   linkArray: JSON.stringify(userSpecificLink),
+            // },
+            //   text: documents[idx].pageContent,
+          },
+          documents: documents[idx].pageContent,
+          embeddings: values,
+        }));
 
-      for (const currentmapedvector of mapedvectors) {
-        await collection.add(currentmapedvector);
+        for (const currentmapedvector of mapedvectors) {
+          await collection.add(currentmapedvector);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
     return true;
@@ -81,23 +87,43 @@ export const addvectorStore = async (fulurl, textvalues, userSpecificLink) => {
 };
 
 export async function SimilaritySearchVectorDatabase(query) {
-  var collection = await connectCollection();
-  const embeddings = await embedder.generate(query);
-  const result = await collection.query({
-    queryEmbeddings: embeddings,
-    nResults: 5,
-  });
-  return {
-    responsetext: result.documents.join(" "),
-    userSpecificLink: [
-      ...new Set(result.metadatas[0].map((el) => el.userSpecificLink)),
-    ],
-  };
+  try {
+    var collection = await connectCollection();
+    const embeddings = await embedder.generate(query);
+    const result = await collection.query({
+      queryEmbeddings: embeddings,
+      nResults: 5,
+    });
+    return {
+      responsetext: result.documents.join(" "),
+      userSpecificLink: [
+        ...new Set(
+          result.metadatas[0]
+            .map((el) => {
+              try {
+                return JSON.parse(el.userSpecificLink);
+              } catch (error) {
+                return el.userSpecificLink;
+              }
+            })
+            .reduce((prev, curr) => prev.concat(curr))
+        ),
+      ],
+    };
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function deleteVectorWithId(ids) {
-  var collection = await connectCollection();
-  await collection.delete({ ids: [ids] });
+  try {
+    var collection = await connectCollection();
+    await collection.delete({ ids: ids });
+    return true;
+  } catch (error) {
+    return false;
+    console.log(error);
+  }
 }
 
 export async function getAllVectors() {

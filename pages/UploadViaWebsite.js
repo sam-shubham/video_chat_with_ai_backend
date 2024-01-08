@@ -1,9 +1,27 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import $ from "jquery";
+import Modal, {
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalTitle,
+  ModalTransition,
+} from "@atlaskit/modal-dialog";
 
 const UploadViaWebsite = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [allSourceLinks, setallSourceLinks] = useState([]);
+
+  const textboxref = useRef(null);
+  const formreference = useRef(null);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => {
+    setIsOpen(false);
+    setloading(false);
+    formreference.current.querySelector("button").disabled = false;
+  };
   const [NothingFound, setNothingFound] = useState(false);
   const [allFiles, setallFiles] = useState([]);
   const [DeletingFile, setDeletingFile] = useState({
@@ -56,23 +74,135 @@ const UploadViaWebsite = () => {
   }, []);
   async function DelteFile(el) {
     setDeletingFile({ deleting: true, filename: el.id });
-    for (let i = 0; i <= el.pages + 1; i++) {
-      var { data: axres } = await axios.post("/api/ScrapWebsite/DeleteVector", {
-        ids: `${el.id}/${i}`,
-      });
-      if (!axres.data.matches[0]) {
-        setNothingFound(true);
-      } else {
-        setNothingFound(false);
-        setallFilesFix(axres.data.matches);
-      }
-      if (i == el.pages + 1) {
-        setDeletingFile({ deleting: false, filename: "" });
-      }
+    // var allids = [];
+    var allids = new Array(el.pages + 2).fill(0).map((ele, idx) => {
+      return `${el.id}/${idx}`;
+    });
+    var { data: axres } = await axios.post("/api/ScrapWebsite/DeleteVector", {
+      ids: allids,
+    });
+    if (!axres.data.matches[0]) {
+      console.log();
+      setNothingFound(true);
+    } else {
+      setNothingFound(false);
+      setallFilesFix(axres.data.matches);
     }
+    setDeletingFile({ deleting: false, filename: "" });
+    // if (i == el.pages + 1) {
+    // }
+  }
+  async function finalsubmit() {
+    setIsOpen(false);
+    var links = Array.from(
+      formreference.current.querySelectorAll("input:checked")
+    ).map((el) => el.value);
+    var toastID = toast.loading("Scrapping websites...");
+    var { data: axres } = await axios.post("/api/ScrapWebsite/ScrapWebsites", {
+      links,
+      userSpecificLink: allSourceLinks,
+    });
+    toast.update(toastID, {
+      isLoading: false,
+      type: "success",
+      render: "Websites uploaded",
+      autoClose: 1500,
+    });
+    if (!axres.data.matches[0]) {
+      setNothingFound(true);
+    } else {
+      setNothingFound(false);
+      setallFilesFix(axres.data.matches);
+    }
+    setallSourceLinks([]);
+    setloading(false);
+    formreference.current.querySelector("button").disabled = false;
   }
   return (
     <div>
+      <ModalTransition>
+        {isOpen ? (
+          <Modal onClose={closeModal}>
+            <ModalHeader>
+              <ModalTitle>Add Source Links</ModalTitle>
+            </ModalHeader>
+            <ModalBody>
+              <form
+                onSubmit={(form) => {
+                  form.preventDefault();
+                  try {
+                    new URL(textboxref.current.value);
+                    setallSourceLinks((ele) => [
+                      ...ele,
+                      textboxref.current.value,
+                    ]);
+                  } catch (error) {
+                    alert("Please enter any valid URL");
+                  }
+                }}
+                className="flex flex-col gap-[0.7rem]"
+              >
+                <div>
+                  <input
+                    type="text"
+                    required
+                    ref={textboxref}
+                    placeholder="Enter Any Url/Video Url For Refrence(Leave Empty if not any)"
+                    className="w-full px-4 py-3 rounded-md bg-slate-200 outline-none text-black"
+                  />
+                </div>
+                <div className="grid gap-[0.5rem] grid-cols-8">
+                  {allSourceLinks.map((el, idx) => (
+                    <div
+                      title={el}
+                      key={idx + el}
+                      className="relative  group w-[3.8rem] h-[3.8rem] flex items-center justify-center rounded-md bg-slate-400 text-white"
+                    >
+                      <h3>{idx + 1}</h3>
+                      <div
+                        onClick={() => {
+                          setallSourceLinks((eel) => {
+                            return eel.filter((curel) => curel != el);
+                          });
+                        }}
+                        className="absolute z-[2] cursor-pointer top-[-0.5rem] right-[-0.5rem] opacity-0 group-hover:opacity-100 bg-red-500 rounded-full w-[2rem] h-[2rem] grid place-content-center transition-all duration-200"
+                      >
+                        <i class="fi fi-rr-trash flex items-center"></i>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex justify-end w-full ">
+                  <button
+                    className="w-[5rem] py-2 /w-fit bg-fuchsia-500 rounded-md text-white"
+                    type="submit"
+                  >
+                    Add
+                  </button>
+                </div>
+                <hr />
+              </form>
+            </ModalBody>
+            <ModalFooter>
+              <button
+                className="bg-red-400 hover:bg-red-500 text-white rounded-md px-6 py-2"
+                onClick={closeModal}
+              >
+                Close
+              </button>
+              <button
+                className="bg-[rgb(96,134,250)] hover:bg-[rgb(96,165,250)] text-black rounded-md px-6 py-2"
+                type="submit"
+                onClick={finalsubmit}
+              >
+                Final Submit
+              </button>
+            </ModalFooter>
+          </Modal>
+        ) : (
+          <></>
+        )}
+      </ModalTransition>
       <div className="w-full h-[100vh]">
         <div className="p-[0.8rem] md:p-[1.5rem] w-full h-full">
           <div className="flex md:flex-row flex-col justify-between h-full gap-[1.5rem] w-full">
@@ -172,6 +302,7 @@ const UploadViaWebsite = () => {
             <div className="w-full md:w-[29rem]  rounded-lg min-h-[20rem] md:mb-0 md:h-[50%] p-[1rem]  bg-[#2F363E]">
               <form
                 className="h-full w-full flex flex-col justify-between"
+                ref={formreference}
                 onSubmit={async (formel) => {
                   formel.preventDefault();
                   setloading(true);
@@ -189,8 +320,12 @@ const UploadViaWebsite = () => {
 
                       setgetLinksState(false);
                       setscrapedlinks(axres.data);
+                      setloading(false);
+                      formel.target.querySelector("button").disabled = false;
                     } else {
                       toast.error("We Can't Find Any Url");
+                      setloading(false);
+                      formel.target.querySelector("button").disabled = false;
                     }
                   } else {
                     if (
@@ -218,35 +353,37 @@ const UploadViaWebsite = () => {
                       }
                       setloading(false);
                       formel.target.querySelector("button").disabled = false;
-                      return;
-                    }
-                    var userSpecificLink = prompt(
-                      "Enter Any Url/Video Url For Refrence(Leave Empty if not any)"
-                    );
-
-                    var links = Array.from(
-                      formel.target.querySelectorAll("input:checked")
-                    ).map((el) => el.value);
-                    var toastID = toast.loading("Scrapping websites...");
-                    var { data: axres } = await axios.post(
-                      "/api/ScrapWebsite/ScrapWebsites",
-                      { links, userSpecificLink }
-                    );
-                    toast.update(toastID, {
-                      isLoading: false,
-                      type: "success",
-                      render: "Websites uploaded",
-                      autoClose: 1500,
-                    });
-                    if (!axres.data.matches[0]) {
-                      setNothingFound(true);
+                      // return;
                     } else {
-                      setNothingFound(false);
-                      setallFilesFix(axres.data.matches);
+                      openModal();
                     }
+
+                    // var userSpecificLink = prompt(
+                    //   "Enter Any Url/Video Url For Refrence(Leave Empty if not any)"
+                    // );
+
+                    // var links = Array.from(
+                    //   formel.target.querySelectorAll("input:checked")
+                    // ).map((el) => el.value);
+                    // var toastID = toast.loading("Scrapping websites...");
+                    // var { data: axres } = await axios.post(
+                    //   "/api/ScrapWebsite/ScrapWebsites",
+                    //   { links, userSpecificLink }
+                    // );
+                    // toast.update(toastID, {
+                    //   isLoading: false,
+                    //   type: "success",
+                    //   render: "Websites uploaded",
+                    //   autoClose: 1500,
+                    // });
+                    // if (!axres.data.matches[0]) {
+                    //   setNothingFound(true);
+                    // } else {
+                    //   setNothingFound(false);
+                    //   setallFilesFix(axres.data.matches);
+                    // }
                   }
-                  setloading(false);
-                  formel.target.querySelector("button").disabled = false;
+
                   //   GetAllFiles();
                 }}
               >
