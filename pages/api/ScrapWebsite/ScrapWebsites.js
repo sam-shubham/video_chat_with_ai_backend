@@ -36,7 +36,7 @@ router.post(async (req, res) => {
 
         //   console.log(alltext);
         // var Data_source = [link, userSpecificLink];
-        console.log(Data_source);
+        // console.log(Data_source);
         var confirmedVectorAdded = await addvectorStore(
           link,
           alltext,
