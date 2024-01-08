@@ -94,20 +94,28 @@ export async function SimilaritySearchVectorDatabase(query) {
       queryEmbeddings: embeddings,
       nResults: 5,
     });
-    // console.log(result.metadatas[0]);
+    console.log(
+      result.metadatas[0].map((el) => {
+        try {
+          return JSON.parse(el.userSpecificLink);
+        } catch (error) {
+          return el.userSpecificLink;
+        }
+      })
+    );
     return {
       responsetext: result.documents.join(" "),
       userSpecificLink: [
         ...new Set(
-          result.metadatas[0]
-            .map((el) => {
-              try {
-                return JSON.parse(el.userSpecificLink);
-              } catch (error) {
-                return el.userSpecificLink;
-              }
-            })
-            .reduce((prev, curr) => prev.concat(curr))
+          result.metadatas[0].reduce((prev, curr) => {
+            try {
+              return [...prev, ...JSON.parse(curr.userSpecificLink)];
+            } catch (error) {
+              console.log(error);
+              return [...prev, curr.userSpecificLink];
+            }
+            // prev.concat(curr);
+          }, [])
         ),
       ],
     };
