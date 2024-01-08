@@ -35,12 +35,12 @@ router.post(async (req, res) => {
         getTextContent(document.body, alltextfunc);
 
         //   console.log(alltext);
-        var Data_source = [link, userSpecificLink];
+        // var Data_source = [link, userSpecificLink];
         console.log(Data_source);
         var confirmedVectorAdded = await addvectorStore(
           link,
           alltext,
-          Data_source
+          userSpecificLink
         );
       } catch (error) {}
       //   console.log(await deleteVectors("https://adamglobal.com/about-us/"));
