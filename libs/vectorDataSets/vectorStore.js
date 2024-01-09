@@ -94,15 +94,6 @@ export async function SimilaritySearchVectorDatabase(query) {
       queryEmbeddings: embeddings,
       nResults: 5,
     });
-    console.log(
-      result.metadatas[0].map((el) => {
-        try {
-          return JSON.parse(el.userSpecificLink);
-        } catch (error) {
-          return el.userSpecificLink;
-        }
-      })
-    );
     return {
       responsetext: result.documents.join(" "),
       userSpecificLink: [

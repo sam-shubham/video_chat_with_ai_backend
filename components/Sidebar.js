@@ -13,6 +13,11 @@ const Sidebar = () => {
       img: "globe",
       path: "/UploadViaWebsite",
     },
+    {
+      label: "Edit Popular Prompts",
+      img: "arrow-trend-up",
+      path: "/EditPopularPrompts",
+    },
   ]);
 
   return (
