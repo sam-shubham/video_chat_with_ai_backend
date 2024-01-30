@@ -13,7 +13,7 @@ import Modal, {
 const UploadViaWebsite = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [allSourceLinks, setallSourceLinks] = useState([]);
-
+  const [SearchBotInsideAiMemory, setSearchBotInsideAiMemory] = useState("");
   const textboxref = useRef(null);
   const formreference = useRef(null);
   const openModal = () => setIsOpen(true);
@@ -206,7 +206,7 @@ const UploadViaWebsite = () => {
       <div className="w-full h-[100vh]">
         <div className="p-[0.8rem] md:p-[1.5rem] w-full h-full">
           <div className="flex md:flex-row flex-col justify-between h-full gap-[1.5rem] w-full">
-            <div className="w-full md:w-[70%] rounded-lg h-full   flex flex-col gap-[1.5rem]  px-[0.5rem]  py-[1.5rem] md:px-[1.5rem] bg-gradient-to-tr to-[#272d34] via-[#343b44] from-[#2F363E]">
+            <div className="w-full md:w-[70%] rounded-lg h-full scroll-pt-[0.5rem] overflow-y-scroll  overflow-x-hidden  flex flex-col gap-[0.5rem]  px-[0.5rem]  py-[1.5rem] md:px-[1.5rem] bg-gradient-to-tr to-[#272d34] via-[#343b44] from-[#2F363E]">
               <div className="flex gap-[1.5rem] w-full justify-between">
                 <div className="flex gap-[1.5rem]">
                   <i class="fi fi-sr-globe flex items-center text-[8rem] text-[#24292D]"></i>
@@ -225,49 +225,70 @@ const UploadViaWebsite = () => {
                   </h3> */}
                 </div>
               </div>
+              <div className="flex justify-end w-full items-center px-3 /py-2 ">
+                {/* <div>Search:</div> */}
+                <input
+                  type="text"
+                  className="px-4 py-3 bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.03)] outline-none w-[40%] rounded-md mb-[0.5rem]"
+                  placeholder="Search..."
+                  value={SearchBotInsideAiMemory}
+                  onChange={({ currentTarget: { value } }) => {
+                    setSearchBotInsideAiMemory(value);
+                  }}
+                />
+              </div>
               <hr className="w-full md:px-[1.5rem]  border-black" />
-              <div className="w-full h-full flex flex-col gap-[1rem] overflow-y-scroll  overflow-x-hidden">
+              <div className="w-full h-full flex flex-col gap-[1rem] /overflow-y-scroll  /overflow-x-hidden">
                 {NothingFound ? (
-                  <div
-                    role="status"
-                    className="w-full h-full flex items-center justify-center"
-                  >
-                    <h3 className="text-lg" style={{ fontFamily: "rubik" }}>
-                      Nothing Found In The Refrence Folder!
-                    </h3>
-                  </div>
-                ) : allFiles[0] ? (
-                  allFiles.map((el, index) => (
+                  <>
                     <div
-                      key={index + Math.random()}
-                      className="px-4 py-[0.8rem] group relative flex flex-col justify-between bg-[#24292D] w-full rounded-lg"
+                      role="status"
+                      className="w-full h-full flex items-center justify-center"
                     >
-                      <div className="flex items-center text-xs md:text-lg w-full py-[0.8rem]">
-                        {` ${index + 1}. ${el.id}`}
-                      </div>
-                      <div className="w-full flex justify-between">
-                        <div className="flex gap-1 items-center text-xs w-max">
-                          {"Website parts: " + el.pages}
-                          {DeletingFile.filename == el.id ? (
-                            <h3 className="ml-[0.5rem] text-red-600">
-                              Deleting...
-                            </h3>
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                        {/* <h3 className="text-xs w-max">{el.pages}</h3> */}
-                      </div>
-                      <button
-                        onClick={() => {
-                          DelteFile(el);
-                        }}
-                        className="absolute group-hover:opacity-100 opacity-0 right-0 rounded-tr-lg rounded-bl-lg top-0 p-2 hover:bg-red-800 bg-red-700 transition-all duration-200"
-                      >
-                        <i class="fi fi-rr-trash"></i>
-                      </button>
+                      <h3 className="text-lg" style={{ fontFamily: "rubik" }}>
+                        Nothing Found In The Refrence Folder!
+                      </h3>
                     </div>
-                  ))
+                  </>
+                ) : allFiles[0] ? (
+                  <div>
+                    <div className="w-full h-full flex flex-col gap-[1rem] /overflow-y-scroll  /overflow-x-hidden">
+                      {allFiles.map(
+                        (el, index) =>
+                          el.id.includes(SearchBotInsideAiMemory) && (
+                            <div
+                              key={index + Math.random()}
+                              className="px-4 py-[0.8rem] group relative flex flex-col justify-between bg-[#24292D] w-full rounded-lg"
+                            >
+                              <div className="flex items-center text-xs md:text-lg w-full py-[0.8rem]">
+                                {` ${index + 1}. ${el.id}`}
+                              </div>
+                              <div className="w-full flex justify-between">
+                                <div className="flex gap-1 items-center text-xs w-max">
+                                  {"Website parts: " + el.pages}
+                                  {DeletingFile.filename == el.id ? (
+                                    <h3 className="ml-[0.5rem] text-red-600">
+                                      Deleting...
+                                    </h3>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                                {/* <h3 className="text-xs w-max">{el.pages}</h3> */}
+                              </div>
+                              <button
+                                onClick={() => {
+                                  DelteFile(el);
+                                }}
+                                className="absolute group-hover:opacity-100 opacity-0 right-0 rounded-tr-lg rounded-bl-lg top-0 p-2 hover:bg-red-800 bg-red-700 transition-all duration-200"
+                              >
+                                <i class="fi fi-rr-trash"></i>
+                              </button>
+                            </div>
+                          )
+                      )}
+                    </div>
+                  </div>
                 ) : (
                   <div
                     role="status"
