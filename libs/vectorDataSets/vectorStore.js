@@ -9,7 +9,7 @@ var client = new ChromaClient({
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { OpenAIEmbeddingFunction } from "chromadb";
 const embedder = new OpenAIEmbeddingFunction({
-  openai_api_key: "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",
+  openai_api_key: "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",
 });
 
 async function connectCollection() {
@@ -111,7 +111,7 @@ export async function SimilaritySearchVectorDatabase(query) {
       ],
     };
   } catch (error) {
-    console.log(error);
+    console.log("chroma-DB", error);
   }
 }
 
