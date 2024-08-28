@@ -82,7 +82,7 @@ const Login = () => {
               href="#"
               className="flex  items-center justify-center mb-6 text-2xl font-semibold  text-white"
             >
-              24 Justice
+              LPU AI 😎
             </a>
           </div>
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
