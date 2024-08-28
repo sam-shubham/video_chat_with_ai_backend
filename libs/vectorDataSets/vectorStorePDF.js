@@ -14,7 +14,9 @@ const embedder = new OpenAIEmbeddingFunction({
 
 async function connectCollection() {
   try {
-    return await client.getCollection({ name: "allPDF" });
+    return await client.getOrCreateCollection({
+      name: "personallovelybotallPDF",
+    });
   } catch (error) {
     if (
       error.message.includes("Collection") &&

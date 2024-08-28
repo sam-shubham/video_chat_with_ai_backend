@@ -14,7 +14,7 @@ const embedder = new OpenAIEmbeddingFunction({
 
 async function connectCollection() {
   try {
-    return await client.getCollection({ name: "allwebsites" });
+    return await client.getOrCreateCollection({ name: "personallovelybot" });
   } catch (error) {
     if (
       error.message.includes("Collection") &&
@@ -38,6 +38,8 @@ async function connectCollection() {
 export const addvectorStore = async (fulurl, textvalues, userSpecificLink) => {
   try {
     var collection = await connectCollection();
+    console.log(collection);
+
     const text = textvalues;
 
     const textSplitter = new RecursiveCharacterTextSplitter({

@@ -11,7 +11,7 @@ import Modal, {
 } from "@atlaskit/modal-dialog";
 
 const UploadViaWebsite = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [allSourceLinks, setallSourceLinks] = useState([]);
   const [SearchBotInsideAiMemory, setSearchBotInsideAiMemory] = useState("");
   const textboxref = useRef(null);
@@ -60,6 +60,15 @@ const UploadViaWebsite = () => {
     });
     setallFiles(ffiles);
   };
+
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     console.log("yes");
+
+  //     setIsOpen((cur) => !cur);
+  //   }, 3000);
+  // }, []);
+
   useEffect(() => {
     (async () => {
       var { data: axres } = await axios.get("/api/ScrapWebsite/getAllVectors");
@@ -120,102 +129,191 @@ const UploadViaWebsite = () => {
   }
   return (
     <div>
-      <ModalTransition>
-        {isOpen ? (
-          <Modal onClose={closeModal}>
-            <ModalHeader>
-              <ModalTitle>Add Source Links</ModalTitle>
-            </ModalHeader>
-            <ModalBody>
-              <form
-                onSubmit={(form) => {
-                  form.preventDefault();
-                  try {
-                    new URL(textboxref.current.value);
-                    setallSourceLinks((ele) => [
-                      ...ele,
-                      textboxref.current.value,
-                    ]);
-                  } catch (error) {
-                    alert("Please enter any valid URL");
-                  }
-                }}
-                className="flex flex-col gap-[0.7rem]"
+      {/* <ModalTransition> */}
+      {isOpen ? (
+        <div className="w-[100vw] h-[100vh] absolute top-0 left-0 bg-[#0006] flex justify-center items-center z-[99999]">
+          <div className="bg-white rounded-lg p-8 w-[560px]">
+            <h1 class="mb-2">
+              <span
+                // id="modal-dialog-title-2"
+                className="text-xl ml-1  text-black"
               >
-                <div>
-                  <input
-                    type="text"
-                    required
-                    ref={textboxref}
-                    placeholder="Enter Any Url/Video Url For Refrence(Leave Empty if not any)"
-                    className="w-full px-4 py-3 rounded-md bg-slate-200 outline-none text-black"
-                  />
-                </div>
-                <div className="grid gap-[0.5rem] grid-cols-8">
-                  {allSourceLinks.map((el, idx) => (
-                    <div
-                      title={el}
-                      key={idx + el}
-                      className="relative  group w-[3.8rem] h-[3.8rem] flex items-center justify-center rounded-md bg-slate-400 text-white"
-                    >
-                      <h3>{idx + 1}</h3>
-                      <div
-                        onClick={() => {
-                          setallSourceLinks((eel) => {
-                            return eel.filter((curel) => curel != el);
-                          });
-                        }}
-                        className="absolute z-[2] cursor-pointer top-[-0.5rem] right-[-0.5rem] opacity-0 group-hover:opacity-100 bg-red-500 rounded-full w-[2rem] h-[2rem] grid place-content-center transition-all duration-200"
-                      >
-                        <i class="fi fi-rr-trash flex items-center"></i>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex justify-end w-full ">
-                  <button
-                    className="w-[5rem] py-2 /w-fit bg-fuchsia-500 rounded-md text-white"
-                    type="submit"
+                Add Source Links
+              </span>
+            </h1>
+
+            <form
+              onSubmit={(form) => {
+                form.preventDefault();
+                try {
+                  new URL(textboxref.current.value);
+                  setallSourceLinks((ele) => [
+                    ...ele,
+                    textboxref.current.value,
+                  ]);
+                } catch (error) {
+                  alert("Please enter any valid URL");
+                }
+              }}
+              className="flex flex-col gap-[0.7rem]"
+            >
+              <div>
+                <input
+                  type="text"
+                  required
+                  ref={textboxref}
+                  placeholder="Enter Any Url/Video Url For Refrence(Leave Empty if not any)"
+                  className="w-full px-4 py-3 rounded-md bg-slate-200 outline-none text-black"
+                />
+              </div>
+              <div className="grid gap-[0.5rem] grid-cols-8">
+                {allSourceLinks.map((el, idx) => (
+                  <div
+                    title={el}
+                    key={idx + el}
+                    className="relative  group w-[3.8rem] h-[3.8rem] flex items-center justify-center rounded-md bg-slate-400 text-white"
                   >
-                    Add
-                  </button>
-                </div>
-                <hr />
-              </form>
-            </ModalBody>
-            <ModalFooter>
+                    <h3>{idx + 1}</h3>
+                    <div
+                      onClick={() => {
+                        setallSourceLinks((eel) => {
+                          return eel.filter((curel) => curel != el);
+                        });
+                      }}
+                      className="absolute z-[2] cursor-pointer top-[-0.5rem] right-[-0.5rem] opacity-0 group-hover:opacity-100 bg-red-500 rounded-full w-[2rem] h-[2rem] grid place-content-center transition-all duration-200"
+                    >
+                      <i class="fi fi-rr-trash flex items-center"></i>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-end w-full ">
+                <button
+                  className="w-[5rem] py-2 /w-fit bg-fuchsia-500 rounded-md text-white"
+                  type="submit"
+                >
+                  Add
+                </button>
+              </div>
+              <hr />
+            </form>
+            <div className="flex flex-row mt-5 gap-x-2 justify-between">
               <button
-                className="bg-red-400 hover:bg-red-500 text-white rounded-md px-6 py-2"
+                className="bg-red-400 hover:bg-red-500 text-white rounded-md px-6 py-2 cursor-pointer"
                 onClick={closeModal}
               >
                 Close
               </button>
               <button
-                className="bg-[rgb(96,134,250)] hover:bg-[rgb(96,165,250)] text-black rounded-md px-6 py-2"
+                className="bg-[rgb(96,134,250)] hover:bg-[rgb(96,165,250)] text-black rounded-md px-6 py-2 cursor-pointer"
                 type="submit"
                 onClick={finalsubmit}
               >
                 Final Submit
               </button>
-            </ModalFooter>
-          </Modal>
-        ) : (
-          <></>
-        )}
-      </ModalTransition>
-      <div className="w-full h-[100vh]">
+            </div>
+          </div>
+        </div>
+      ) : (
+        // (
+        //   <Modal onClose={closeModal}>
+        //     <ModalHeader>
+        //       <ModalTitle>Add Source Links</ModalTitle>
+        //     </ModalHeader>
+        //     <ModalBody>
+        //       <form
+        //         onSubmit={(form) => {
+        //           form.preventDefault();
+        //           try {
+        //             new URL(textboxref.current.value);
+        //             setallSourceLinks((ele) => [
+        //               ...ele,
+        //               textboxref.current.value,
+        //             ]);
+        //           } catch (error) {
+        //             alert("Please enter any valid URL");
+        //           }
+        //         }}
+        //         className="flex flex-col gap-[0.7rem]"
+        //       >
+        //         <div>
+        //           <input
+        //             type="text"
+        //             required
+        //             ref={textboxref}
+        //             placeholder="Enter Any Url/Video Url For Refrence(Leave Empty if not any)"
+        //             className="w-full px-4 py-3 rounded-md bg-slate-200 outline-none text-black"
+        //           />
+        //         </div>
+        //         <div className="grid gap-[0.5rem] grid-cols-8">
+        //           {allSourceLinks.map((el, idx) => (
+        //             <div
+        //               title={el}
+        //               key={idx + el}
+        //               className="relative  group w-[3.8rem] h-[3.8rem] flex items-center justify-center rounded-md bg-slate-400 text-white"
+        //             >
+        //               <h3>{idx + 1}</h3>
+        //               <div
+        //                 onClick={() => {
+        //                   setallSourceLinks((eel) => {
+        //                     return eel.filter((curel) => curel != el);
+        //                   });
+        //                 }}
+        //                 className="absolute z-[2] cursor-pointer top-[-0.5rem] right-[-0.5rem] opacity-0 group-hover:opacity-100 bg-red-500 rounded-full w-[2rem] h-[2rem] grid place-content-center transition-all duration-200"
+        //               >
+        //                 <i class="fi fi-rr-trash flex items-center"></i>
+        //               </div>
+        //             </div>
+        //           ))}
+        //         </div>
+        //         <div className="flex justify-end w-full ">
+        //           <button
+        //             className="w-[5rem] py-2 /w-fit bg-fuchsia-500 rounded-md text-white"
+        //             type="submit"
+        //           >
+        //             Add
+        //           </button>
+        //         </div>
+        //         <hr />
+        //       </form>
+        //     </ModalBody>
+        //     <ModalFooter>
+        //       <button
+        //         className="bg-red-400 hover:bg-red-500 text-white rounded-md px-6 py-2"
+        //         onClick={closeModal}
+        //       >
+        //         Close
+        //       </button>
+        //       <button
+        //         className="bg-[rgb(96,134,250)] hover:bg-[rgb(96,165,250)] text-black rounded-md px-6 py-2"
+        //         type="submit"
+        //         onClick={finalsubmit}
+        //       >
+        //         Final Submit
+        //       </button>
+        //     </ModalFooter>
+        //   </Modal>
+        // )
+        <></>
+      )}
+      {/* </ModalTransition> */}
+      <div className="w-full h-[100vh] ">
         <div className="p-[0.8rem] md:p-[1.5rem] w-full h-full">
           <div className="flex md:flex-row flex-col justify-between h-full gap-[1.5rem] w-full">
             <div className="w-full md:w-[70%] rounded-lg h-full scroll-pt-[0.5rem] overflow-y-scroll  overflow-x-hidden  flex flex-col gap-[0.5rem]  px-[0.5rem]  py-[1.5rem] md:px-[1.5rem] bg-gradient-to-tr to-[#272d34] via-[#343b44] from-[#2F363E]">
               <div className="flex gap-[1.5rem] w-full justify-between">
                 <div className="flex gap-[1.5rem]">
-                  <i class="fi fi-sr-globe flex items-center text-[8rem] text-[#24292D]"></i>
-                  <div className="flex flex-col justify-center gap-[1rem]">
-                    <h3 className="text-lg md:text-3xl font-semibold">
-                      Upload Websites
+                  {/* <i class="fi fi-sr-globe flex items-center text-[8rem] text-[#24292D]"></i> */}
+                  <img
+                    src="/websiteicon.png"
+                    className="aspect-square w-[8rem]"
+                  />
+                  <div className="flex flex-col justify-center gap-[0.2rem]">
+                    <h3 className="text-lg md:text-3xl font-semibold leading-none">
+                      Train With Websites
                     </h3>
-                    <h3 className="w-full md:text-base text-sm font-light">
-                      {`For the AI Chatbot's reference, you can feed data via Websites.`}
+                    <h3 className="w-full md:text-base text-sm font-light opacity-60 ml-1">
+                      {`You can train the AI Bot Dataset with Custom Websites or Weblinks.`}
                     </h3>
                   </div>
                 </div>
@@ -328,6 +426,8 @@ const UploadViaWebsite = () => {
                   formel.preventDefault();
                   setloading(true);
 
+                  // alert("hello");
+
                   formel.currentTarget.querySelector("button").disabled = true;
                   if (getLinksState) {
                     var { data: axres } = await axios.post(
@@ -349,6 +449,7 @@ const UploadViaWebsite = () => {
                       formel.target.querySelector("button").disabled = false;
                     }
                   } else {
+                    console.log("aa");
                     if (
                       Array.from(
                         formel.target.querySelectorAll("input[type='checkbox']")
@@ -357,6 +458,8 @@ const UploadViaWebsite = () => {
                         formel.target.querySelector("input[type='checkbox']")
                           .value
                     ) {
+                      console.log("a");
+
                       setgetLinksState(true);
                       var { data: axres } = await axios.post(
                         "/api/ScrapWebsite/getAllWebLinks",
@@ -376,7 +479,11 @@ const UploadViaWebsite = () => {
                       formel.target.querySelector("button").disabled = false;
                       // return;
                     } else {
-                      openModal();
+                      console.log("b");
+
+                      setIsOpen(true);
+
+                      // openModal();
                     }
 
                     // var userSpecificLink = prompt(
@@ -440,7 +547,10 @@ const UploadViaWebsite = () => {
                     ))}
                   </div>
                 </div>
-                <button className="bg-[#084683] hover:bg-[#084a83] w-full p-3 rounded-lg transition-all duration-200">
+                <button
+                  type="submit"
+                  className="bg-[#084683] hover:bg-[#084a83] w-full p-3 rounded-lg transition-all duration-200"
+                >
                   {loading ? (
                     <div
                       role="status"

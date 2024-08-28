@@ -1,11 +1,11 @@
 {
-  "name": "bizgptadmin",
+  "name": "lpu_bot_admin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 4090",
     "build": "next build",
-    "start": "next start -p 4090",
+    "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {

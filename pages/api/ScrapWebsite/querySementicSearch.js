@@ -5,6 +5,8 @@ import { createRouter, expressWrapper } from "next-connect";
 const router = createRouter();
 
 router.post(async (req, res) => {
+  console.log(req.body);
+
   try {
     var { responsetext, userSpecificLink } =
       await SimilaritySearchVectorDatabase(req.body.query);

@@ -34,22 +34,22 @@ router.post(async (req, res) => {
         };
         getTextContent(document.body, alltextfunc);
 
-        //   console.log(alltext);
-        // var Data_source = [link, userSpecificLink];
-        // console.log(Data_source);
+        // Add alt text from img tags
+        const images = document.getElementsByTagName("img");
+        for (const img of images) {
+          if (img.alt) {
+            alltextfunc(img.alt);
+          }
+        }
+
         var confirmedVectorAdded = await addvectorStore(
           link,
           alltext,
           userSpecificLink
         );
-      } catch (error) {}
-      //   console.log(await deleteVectors("https://adamglobal.com/about-us/"));
-      //   console.log(await callVectorDBQAChain("adamglobal"));
-      //   if (confirmedVectorAdded) {
-      // res.send({ success: true });
-      //   } else {
-      // res.send({ success: false });
-      //   }
+      } catch (error) {
+        console.log(`Error processing link ${link}:`, error);
+      }
     }
     var allvectors = await getAllVectors();
     res.send({ success: true, data: { matches: allvectors } });
