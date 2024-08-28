@@ -11,7 +11,7 @@ import Modal, {
 } from "@atlaskit/modal-dialog";
 
 const UploadViaWebsite = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [allSourceLinks, setallSourceLinks] = useState([]);
   const [SearchBotInsideAiMemory, setSearchBotInsideAiMemory] = useState("");
   const textboxref = useRef(null);
