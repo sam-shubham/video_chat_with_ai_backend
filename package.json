@@ -1,5 +1,5 @@
 {
-  "name": "lpu_bot_admin",
+  "name": "video_chat_with_ai_backend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,6 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
+  },
+  "author": {
+    "email": "mrshubhamsamrat05@gmail.com",
+    "name": "@sam-shubham",
+    "url": "https://sam.appambient.com"
   },
   "dependencies": {
     "@flaticon/flaticon-uicons": "^2.2.0",
