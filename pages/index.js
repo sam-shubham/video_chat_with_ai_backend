@@ -129,7 +129,7 @@ export default function Home() {
           <div className="flex md:flex-row flex-col h-full gap-[2rem] w-full justify-between">
             <div className="bg-[#2f363e] min-w-[70%] /min-w-[60rem] flex flex-col min-h-[30rem] gap-[1rem] p-4 rounded-xl">
               <h3 className="text-xl" style={{ fontFamily: "rubik" }}>
-                OpenAi Prompt
+                Intial Guide Prompt
               </h3>
               <textarea
                 type="text"
@@ -147,7 +147,7 @@ export default function Home() {
             <div className="bg-[#2f363e] min-w-[28%] flex flex-col  min-h-[30rem] p-4 justify-between rounded-xl">
               <div className="flex flex-col gap-[1rem]">
                 <h3 className="text-xl" style={{ fontFamily: "rubik" }}>
-                  OpenAi Settings
+                  LLM Settings
                 </h3>
                 <div className="flex flex-col items-center gap-[1rem]">
                   <div

@@ -6,16 +6,19 @@ var client = new ChromaClient({
     provider: "token",
   },
 });
+
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { OpenAIEmbeddingFunction } from "chromadb";
 const embedder = new OpenAIEmbeddingFunction({
-  openai_api_key: "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",
+  openai_api_key: process.env.OPENAI,
 });
 
 async function connectCollection() {
   try {
     return await client.getOrCreateCollection({ name: "personallovelybot" });
   } catch (error) {
+    console.log("jjkkllllllll" + error);
+
     if (
       error.message.includes("Collection") &&
       error.message.includes("does not exist.")
@@ -96,6 +99,9 @@ export async function SimilaritySearchVectorDatabase(query) {
       queryEmbeddings: embeddings,
       nResults: 5,
     });
+
+    console.log({ result, query });
+
     return {
       responsetext: result.documents.join(" "),
       userSpecificLink: [

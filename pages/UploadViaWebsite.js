@@ -2,13 +2,13 @@ import axios from "axios";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import $ from "jquery";
-import Modal, {
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  ModalTitle,
-  ModalTransition,
-} from "@atlaskit/modal-dialog";
+// import Modal, {
+//   ModalBody,
+//   ModalFooter,
+//   ModalHeader,
+//   ModalTitle,
+//   ModalTransition,
+// } from "@atlaskit/modal-dialog";
 
 const UploadViaWebsite = () => {
   const [isOpen, setIsOpen] = useState(false);

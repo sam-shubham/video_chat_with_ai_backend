@@ -24,7 +24,7 @@ async function SearchFromVectorStore(query) {
     const loadedVectorStore = await HNSWLib.load(
       process.env.HNSWLibvectorPath,
       new OpenAIEmbeddings({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        openAIApiKey: process.env.OPENAI,
         //   modelName: "text-embedding-ada-002",
       })
     );

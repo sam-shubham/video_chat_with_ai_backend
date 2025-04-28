@@ -12,7 +12,7 @@ const pdf = require("pdf-parse");
 // });
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: process.env.OPENAI,
 });
 
 const openai = new OpenAIApi(configuration);

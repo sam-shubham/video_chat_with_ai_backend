@@ -9,12 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@atlaskit/modal-dialog": "^12.10.3",
     "@flaticon/flaticon-uicons": "^2.2.0",
     "@pinecone-database/pinecone": "^0.1.6",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
-    "chromadb": "^1.6.1",
+    "chromadb": "1.6.1",
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.4",
     "file-size": "^1.0.0",

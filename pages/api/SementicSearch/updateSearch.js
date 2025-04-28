@@ -45,7 +45,7 @@ async function addHNSWLibDocument(docs) {
   const vectorStore = await HNSWLib.fromDocuments(
     docs,
     new OpenAIEmbeddings({
-      openAIApiKey: process.env.OPENAI_API_KEY,
+      openAIApiKey: process.env.OPENAI,
       //   modelName: "text-embedding-ada-002",
     })
   );

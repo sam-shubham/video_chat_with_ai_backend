@@ -9,7 +9,7 @@ var client = new ChromaClient({
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { OpenAIEmbeddingFunction } from "chromadb";
 const embedder = new OpenAIEmbeddingFunction({
-  openai_api_key: "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",
+  openai_api_key: process.env.OPENAI,
 });
 
 async function connectCollection() {
