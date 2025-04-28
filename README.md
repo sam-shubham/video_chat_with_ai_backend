@@ -4,7 +4,7 @@ Welcome to the backend repository for the **Personalized Video Chat AI** project
 
 ## 🔗 Related Repositories
 
-- **Frontend Repository**: [sam-shubham/video_chat_with_ai_fronted](https://github.com/sam-shubham/video_chat_with_ai_fronted)  
+- **Frontend Repository**: [sam-shubham/video_chat_with_ai_frontend](https://github.com/sam-shubham/video_chat_with_ai_frontend)  
   The frontend interface for the Personalized Video Chat AI system, built with Next.js and TailwindCSS.
 
 ## 📖 Overview
